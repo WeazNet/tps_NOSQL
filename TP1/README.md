@@ -189,22 +189,11 @@ Les hachages permettent de stocker des objets avec plusieurs champs.
   HINCRBY user:4 age 4
   (integer) 9
   ```
-
----
-
-## Comparaison entre bases de données relationnelles et non-relationnelles
-
-### Bases de données relationnelles
-
-- **Accès aux données** : Pour afficher une donnée, il faut toujours la lire depuis la RAM, ce qui peut être pénalisant en termes de latence.
-- **Algorithmes** : Utilisent des algorithmes sophistiqués pour ramener les données en RAM.
-
-### Bases de données non-relationnelles
-
-- **Accès aux données** : Récupèrent les données du disque vers la RAM par blocs de taille multiple de 512 octets (généralement 4096 octets).
-- **Performance** : Le débit du disque est 20 à 40 fois plus lent que l'accès à la mémoire principale.
-- **Jointures** : Les jointures sont impossibles, ce qui permet de s'affranchir des contraintes et de répartir les données sur plusieurs nœuds/serveurs, facilitant ainsi la mise à l'échelle de la base de données.
-
+- **Récuperer la valeur d'un champ** :
+  ```redis
+  HGET user:4 age
+  "9"
+  ```
 ---
 
 Ce guide vous permet de configurer un environnement fonctionnel pour Redis, ainsi que d’apprendre les commandes essentielles pour commencer à interagir avec Redis.
