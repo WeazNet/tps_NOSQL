@@ -1,3 +1,26 @@
+## Sommaire
+
+1. [Installation de Docker](#1-installation-de-docker)
+2. [Installation et lancement de Redis](#2-installation-et-lancement-de-redis)
+3. [Accéder à Redis](#3-accéder-à-redis)
+4. [Résoudre les problèmes de permissions Docker](#4-résoudre-les-problèmes-de-permissions-docker)
+   1. [Ajouter votre utilisateur au groupe Docker](#ajouter-votre-utilisateur-au-groupe-docker)
+   2. [Vérifier les permissions du socket Docker](#vérifier-les-permissions-du-socket-docker)
+   3. [Utiliser `sudo` pour exécuter les commandes Docker](#utiliser-sudo-pour-exécuter-les-commandes-docker)
+5. [Commandes Redis essentielles (REDIS 1)](#commandes-redis-essentielles)
+   1. [Définir et récupérer des variables](#1-définir-et-récupérer-des-variables)
+   2. [Supprimer une clé](#2-supprimer-une-clé)
+   3. [Manipuler des entiers avec `incr` et `decr`](#3-manipuler-des-entiers-avec-incr-et-decr)
+   4. [Gérer l'expiration des clés](#4-gérer-lexpiration-des-clés)
+   5. [Travailler avec des listes](#5-travailler-avec-des-listes)
+   6. [Différence entre les listes et les ensembles](#différence-entre-les-listes-et-les-ensembles)
+   7. [Manipuler des ensembles](#6-manipuler-des-ensembles)
+6. [Seconde vidéo (REDIS 2)](#seconde-vidéo-redis-2)
+   1. [Ensembles ordonnés (Sorted Sets)](#ensembles-ordonnés-sorted-sets)
+   2. [Hachages (Hashes)](#hachages-hashes)
+7. [Troisième vidéo (REDIS 3)](#troisième-vidéo-redis-3)
+   1. [Pub/Sub (Publication/Souscription)](#pubsub-publicationsouscription)
+
 # Mise en place de l'environnement de travail pour Redis
 
 Avant de commencer, il est préférable de préparer correctement l'environnement de travail.
