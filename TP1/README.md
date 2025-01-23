@@ -1,15 +1,19 @@
-## Mise en place de l'environnement de travail pour Redis
-Avant de commencer, il est préférable de préparer correctement l'environnement de travail.
 
 ---
 
+## Mise en place de l'environnement de travail pour Redis
+
+Avant de commencer, il est préférable de préparer correctement l'environnement de travail.
+
 ### 1. Installation de Docker
+
 Pour installer Redis dans des conditions optimales, Docker est utilisé. Si vous utilisez Manjaro (basé sur Arch Linux), voici la commande pour installer Docker :
 ```bash
 sudo pacman -S docker
 ```
 
 ### 2. Installation et lancement de Redis
+
 Une fois Docker installé, téléchargez l'image Redis depuis le Docker Hub :
 ```bash
 docker pull redis
@@ -21,6 +25,7 @@ docker run --name my-redis -p 6379:6379 -d redis
 Cette commande exécute Redis en arrière-plan et expose le port 6379 pour permettre une interaction avec Redis depuis l'extérieur du conteneur.
 
 ### 3. Accéder à Redis
+
 Pour interagir avec Redis via le terminal, utilisez la commande suivante :
 ```bash
 docker exec -it my-redis redis-cli
@@ -30,9 +35,11 @@ Cela ouvre l'interface en ligne de commande de Redis.
 ---
 
 ## Commandes Redis essentielles
+
 Voici quelques commandes de base pour interagir avec les données stockées dans Redis.
 
 ### 1. Définir et récupérer des variables
+
 - **Définir une clé** :
   ```redis
   set demo "Bonjour"
@@ -45,6 +52,7 @@ Voici quelques commandes de base pour interagir avec les données stockées dans
   ```
 
 ### 2. Supprimer une clé
+
 - **Supprimer une clé existante** :
   ```redis
   del demo
@@ -52,6 +60,7 @@ Voici quelques commandes de base pour interagir avec les données stockées dans
   ```
 
 ### 3. Manipuler des entiers avec `incr` et `decr`
+
 - **Incrémenter une valeur** :
   ```redis
   incr counter
@@ -64,6 +73,7 @@ Voici quelques commandes de base pour interagir avec les données stockées dans
   ```
 
 ### 4. Gérer l'expiration des clés
+
 - **Vérifier l'expiration d'une clé** :
   ```redis
   ttl mykey
@@ -76,6 +86,7 @@ Voici quelques commandes de base pour interagir avec les données stockées dans
   ```
 
 ### 5. Travailler avec des listes
+
 - **Ajouter des éléments à une liste** :
   ```redis
   RPUSH mesCours "BDA"
@@ -91,7 +102,15 @@ Voici quelques commandes de base pour interagir avec les données stockées dans
   "Systèmes distribués"
   ```
 
+### Différence entre les listes et les ensembles
+
+Les listes et les ensembles sont deux structures de données différentes dans Redis :
+
+- **Listes** : Les listes peuvent contenir des éléments dupliqués et l'ordre des éléments est important.
+- **Ensembles** : Les ensembles ne peuvent pas contenir des éléments dupliqués et l'ordre des éléments n'est pas garanti.
+
 ### 6. Manipuler des ensembles
+
 - **Ajouter des éléments à un ensemble** :
   ```redis
   SADD users "admin"
@@ -111,5 +130,81 @@ Voici quelques commandes de base pour interagir avec les données stockées dans
 
 ---
 
-Ce guide vous permet de configurer un environnement fonctionnel pour Redis, ainsi que d’apprendre les commandes essentielles pour commencer à interagir avec Redis.
+## Seconde vidéo (REDIS 2)
 
+La seconde vidéo introduit des concepts et des commandes plus avancés, notamment les ensembles ordonnés (sorted sets) et les hachages (hashes).
+
+### Ensembles ordonnés (Sorted Sets)
+
+Les ensembles ordonnés permettent de stocker des éléments avec un score associé, ce qui permet de les trier.
+
+- **Ajouter des éléments à un ensemble ordonné** :
+  ```redis
+  ZADD score4 19 "admin"
+  ZADD score4 18 "user2"
+  ZADD score4 8 "any"
+  ```
+- **Afficher les éléments d'un ensemble ordonné par ordre croissant** :
+  ```redis
+  ZRANGE score4 0 -1
+  1) "any"
+  2) "user2"
+  3) "admin"
+  ```
+- **Afficher les éléments d'un ensemble ordonné par ordre décroissant** :
+  ```redis
+  ZREVRANGE score4 0 -1
+  1) "admin"
+  2) "user2"
+  3) "any"
+  ```
+- **Obtenir le rang d'un élément** :
+  ```redis
+  ZRANK score4 "user2"
+  (integer) 1
+  ```
+
+### Hachages (Hashes)
+
+Les hachages permettent de stocker des objets avec plusieurs champs.
+
+- **Définir des champs dans un hachage** :
+  ```redis
+  HSET user:11 username "tanasov"
+  HSET user:11 age 22
+  HSET user:11 email vladalexandru.tanasov@edu.univ-paris13.fr
+  ```
+- **Récupérer tous les champs et valeurs d'un hachage** :
+  ```redis
+  HGETALL user:11
+  1) "username"
+  2) "tanasov"
+  3) "age"
+  4) "22"
+  5) "email"
+  6) "vladalexandru.tanasov@edu.univ-paris13.fr"
+  ```
+- **Incrémenter une valeur dans un hachage** :
+  ```redis
+  HINCRBY user:4 age 4
+  (integer) 9
+  ```
+
+---
+
+## Comparaison entre bases de données relationnelles et non-relationnelles
+
+### Bases de données relationnelles
+
+- **Accès aux données** : Pour afficher une donnée, il faut toujours la lire depuis la RAM, ce qui peut être pénalisant en termes de latence.
+- **Algorithmes** : Utilisent des algorithmes sophistiqués pour ramener les données en RAM.
+
+### Bases de données non-relationnelles
+
+- **Accès aux données** : Récupèrent les données du disque vers la RAM par blocs de taille multiple de 512 octets (généralement 4096 octets).
+- **Performance** : Le débit du disque est 20 à 40 fois plus lent que l'accès à la mémoire principale.
+- **Jointures** : Les jointures sont impossibles, ce qui permet de s'affranchir des contraintes et de répartir les données sur plusieurs nœuds/serveurs, facilitant ainsi la mise à l'échelle de la base de données.
+
+---
+
+Ce guide vous permet de configurer un environnement fonctionnel pour Redis, ainsi que d’apprendre les commandes essentielles pour commencer à interagir avec Redis.
