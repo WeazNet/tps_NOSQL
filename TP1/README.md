@@ -1,18 +1,15 @@
-
----
-
-## Mise en place de l'environnement de travail pour Redis
+# Mise en place de l'environnement de travail pour Redis
 
 Avant de commencer, il est préférable de préparer correctement l'environnement de travail.
 
-### 1. Installation de Docker
+## 1. Installation de Docker
 
 Pour installer Redis dans des conditions optimales, Docker est utilisé. Si vous utilisez Manjaro (basé sur Arch Linux), voici la commande pour installer Docker :
 ```bash
 sudo pacman -S docker
 ```
 
-### 2. Installation et lancement de Redis
+## 2. Installation et lancement de Redis
 
 Une fois Docker installé, téléchargez l'image Redis depuis le Docker Hub :
 ```bash
@@ -24,7 +21,7 @@ docker run --name my-redis -p 6379:6379 -d redis
 ```
 Cette commande exécute Redis en arrière-plan et expose le port 6379 pour permettre une interaction avec Redis depuis l'extérieur du conteneur.
 
-### 3. Accéder à Redis
+## 3. Accéder à Redis
 
 Pour interagir avec Redis via le terminal, utilisez la commande suivante :
 ```bash
@@ -32,7 +29,37 @@ docker exec -it my-redis redis-cli
 ```
 Cela ouvre l'interface en ligne de commande de Redis.
 
----
+## 4. Résoudre les problèmes de permissions Docker
+
+Si vous rencontrez des problèmes de permissions lors de l'exécution des commandes Docker, suivez ces étapes :
+
+### Ajouter votre utilisateur au groupe Docker
+
+1. **Créer le groupe Docker (si ce n'est pas déjà fait)** :
+   ```bash
+   sudo groupadd docker
+   ```
+
+2. **Ajouter votre utilisateur au groupe Docker** :
+   ```bash
+   sudo usermod -aG docker $USER
+   ```
+
+3. **Déconnectez-vous et reconnectez-vous** pour que les modifications prennent effet.
+
+### Vérifier les permissions du socket Docker
+
+Assurez-vous que le socket Docker a les bonnes permissions :
+```bash
+sudo chmod 666 /var/run/docker.sock
+```
+
+### Utiliser `sudo` pour exécuter les commandes Docker
+
+Si vous ne souhaitez pas ajouter votre utilisateur au groupe Docker, vous pouvez utiliser `sudo` pour exécuter les commandes Docker :
+```bash
+sudo docker exec -it my-redis redis-cli
+```
 
 ## Commandes Redis essentielles
 
@@ -128,8 +155,6 @@ Les listes et les ensembles sont deux structures de données différentes dans R
   SUNION users otherUsers
   ```
 
----
-
 ## Seconde vidéo (REDIS 2)
 
 La seconde vidéo introduit des concepts et des commandes plus avancés, notamment les ensembles ordonnés (sorted sets) et les hachages (hashes).
@@ -191,17 +216,129 @@ Les hachages permettent de stocker des objets avec plusieurs champs.
   HINCRBY user:4 age 4
   (integer) 9
   ```
-- **Récuperer la valeur d'un champ dans un hachage** :
+- **Récupérer la valeur d'un champ dans un hachage** :
   ```redis
   HGET user:4 age
   "9"
   ```
-- **Récupérer toutes les valeurs d'un hachage** : 
-```redis
+- **Récupérer toutes les valeurs d'un hachage** :
+  ```redis
   HVALS user:4
   1) "Augustin"
   2) "9"
   3) "augustino.r@gmail.com"
+  ```
+
+## Troisième vidéo (REDIS 3)
+
+La troisième vidéo parle des Pub/Sub (Publication/Souscription), qui sont très utilisés avec Redis.
+
+### Pub/Sub (Publication/Souscription)
+
+Le modèle Pub/Sub permet à un client de publier des messages sur un canal et à d'autres clients de s'abonner à ce canal pour recevoir les messages.
+
+#### Exemple de Pub/Sub
+
+**Terminal 1 : S'abonner à des canaux**
+
+```bash
+docker exec -it my-redis redis-cli
+```
+
+```redis
+SUBSCRIBE mescours user:1
+1) "subscribe"
+2) "mescours"
+3) (integer) 1
+1) "subscribe"
+2) "user:1"
+3) (integer) 2
+```
+
+**Terminal 2 : Publier des messages**
+
+```bash
+docker exec -it my-redis redis-cli
+```
+
+```redis
+PUBLISH mescours "Nouveau cours sur MongoDB"
+(integer) 1
+PUBLISH user:1 "Bonjour user 1 !"
+(integer) 1
+PUBLISH mesNotes "Nouvelle note est arrivée"
+(integer) 1
+PUBLISH notes "Nouvelle note est arrivée mais pas reçue par le canal"
+(integer) 0
+```
+
+**Résultats obtenus dans le Terminal 1**
+
+Après avoir publié les messages dans le Terminal 2, le Terminal 1 recevra les messages suivants :
+
+```redis
+1) "message"
+2) "mescours"
+3) "Nouveau cours sur MongoDB"
+1) "message"
+2) "user:1"
+3) "Bonjour user 1 !"
+```
+
+**S'abonner à un motif de canal**
+
+```redis
+PSUBSCRIBE mes*
+1) "psubscribe"
+2) "mes*"
+3) (integer) 1
+```
+
+**Résultats obtenus dans le Terminal 1**
+
+Après avoir publié un message sur `mesNotes` dans le Terminal 2, le Terminal 1 recevra le message suivant :
+
+```redis
+1) "pmessage"
+2) "mes*"
+3) "mesNotes"
+4) "Nouvelle note est arrivée"
+```
+
+### Attention en cas de panne
+
+En cas de panne, il est important de vérifier les bases de données disponibles et de s'assurer que les données sont correctement réparties. Redis met à disposition 16 bases de données par défaut, ce qui permet de segmenter les données et de faciliter la gestion en cas de panne.
+
+- **Sélectionner une base de données** :
+  ```redis
+  SELECT 1
+  OK
+  ```
+
+- **Lister les clés dans une base de données** :
+  ```redis
+  KEYS *
+  (empty array)
+  ```
+
+- **Revenir à la base de données par défaut** :
+  ```redis
+  SELECT 0
+  OK
+  ```
+
+- **Lister les clés dans la base de données par défaut** :
+  ```redis
+  KEYS *
+  1) "mesCours"
+  2) "demo"
+  3) "otherUsers"
+  4) "score4"
+  5) "user:4"
+  6) "user:1234"
+  7) "users"
+  8) "23janv"
+  9) "user:11"
   ```
 ---
 
