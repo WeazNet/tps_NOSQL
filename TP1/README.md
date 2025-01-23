@@ -20,6 +20,11 @@
    2. [Hachages (Hashes)](#hachages-hashes)
 7. [Troisième vidéo (REDIS 3)](#troisième-vidéo-redis-3)
    1. [Pub/Sub (Publication/Souscription)](#pubsub-publicationsouscription)
+8. [Fonctionnalités avancées de Redis](#fonctionnalités-avancées-de-redis)
+   1. [Modèle d'exécution mono-thread](#modèle-dexécution-mono-thread)
+   2. [Pipeline de commandes](#pipeline-de-commandes)
+   3. [Transactions](#transactions)
+   4. [Réplication](#réplication)
 
 # Mise en place de l'environnement de travail pour Redis
 
@@ -363,6 +368,24 @@ En cas de panne, il est important de vérifier les bases de données disponibles
   8) "23janv"
   9) "user:11"
   ```
+## Fonctionnalités avancées de Redis
+
+### Modèle d'exécution mono-thread
+
+Redis utilise un modèle d'exécution mono-thread, ce qui signifie qu'il exécute toutes les commandes dans un seul thread. Cela simplifie le modèle de programmation et évite les problèmes de concurrence. Grâce à son architecture non bloquante, Redis peut gérer des milliers de requêtes par seconde avec une latence très faible.
+
+### Pipeline de commandes
+
+Le pipeline de commandes permet d'envoyer plusieurs commandes à Redis en une seule fois, réduisant ainsi la latence réseau. Cela est particulièrement utile pour les opérations en masse où de nombreuses commandes doivent être exécutées rapidement.
+
+### Transactions
+
+Redis supporte les transactions via la commande `MULTI/EXEC`. Les transactions permettent de grouper plusieurs commandes en une seule opération atomique, garantissant ainsi que toutes les commandes sont exécutées sans interruption.
+
+### Réplication
+
+Redis supporte la réplication maître-esclave, permettant de créer des copies de la base de données principale pour la redondance et la haute disponibilité. La réplication peut être configurée pour être synchrone ou asynchrone, selon les besoins de l'application.
+
 ---
 
 Ce guide vous permet de configurer un environnement fonctionnel pour Redis, ainsi que d’apprendre les commandes essentielles pour commencer à interagir avec Redis.
