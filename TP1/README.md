@@ -173,6 +173,8 @@ Les hachages permettent de stocker des objets avec plusieurs champs.
   HSET user:11 username "tanasov"
   HSET user:11 age 22
   HSET user:11 email vladalexandru.tanasov@edu.univ-paris13.fr
+
+  HMSET user:4 username "Augustin" age 5 email augustino.r@gmail.com
   ```
 - **Récupérer tous les champs et valeurs d'un hachage** :
   ```redis
@@ -189,10 +191,17 @@ Les hachages permettent de stocker des objets avec plusieurs champs.
   HINCRBY user:4 age 4
   (integer) 9
   ```
-- **Récuperer la valeur d'un champ** :
+- **Récuperer la valeur d'un champ dans un hachage** :
   ```redis
   HGET user:4 age
   "9"
+  ```
+- **Récupérer toutes les valeurs d'un hachage** : 
+```redis
+  HVALS user:4
+  1) "Augustin"
+  2) "9"
+  3) "augustino.r@gmail.com"
   ```
 ---
 
