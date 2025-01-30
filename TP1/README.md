@@ -1,7 +1,6 @@
 # Initiation à Redis (TP1)
 
 ## Sommaire
-
 1. [Installation de Docker](#1-installation-de-docker)
 2. [Installation et lancement de Redis](#2-installation-et-lancement-de-redis)
 3. [Accéder à Redis](#3-accéder-à-redis)

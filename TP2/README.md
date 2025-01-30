@@ -1,4 +1,3 @@
-```markdown
 # Initiation à MongoDB (TP2)
 
 ## Sommaire
